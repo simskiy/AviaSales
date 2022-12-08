@@ -1,0 +1,75 @@
+@import 'global.scss';
+
+@mixin media-mobile {
+  @media (min-width: $mediaWidthMobile) {
+    @content;
+  }
+}
+
+@mixin media-tablet {
+  @media (min-width: $mediaWidthTablet) {
+    @content;
+  }
+}
+
+@mixin media-tablet-horizontal {
+  @media (min-width: $mediaWidthTabletHorizontal) {
+    @content;
+  }
+}
+
+@mixin media-laptop {
+  @media (min-width: $mediaWidthLaptop) {
+    @content;
+  }
+}
+
+@mixin media-desktop {
+  @media (min-width: $mediaWidthDesktop) {
+    @content;
+  }
+}
+
+@mixin media-custom($width) {
+  @media (min-width: $width) {
+    @content;
+  }
+}
+
+@mixin retina-2x {
+  @media (min-resolution: 1.5dppx) {
+    @content;
+  }
+}
+
+@mixin retina-3x {
+  @media (min-resolution: 2.5dppx) {
+    @content;
+  }
+}
+
+@mixin retina-4x {
+  @media (min-resolution: 3.5dppx) {
+    @content;
+  }
+}
+
+@mixin hidden {
+  &:not(:focus):not(:active) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    border: 0;
+    padding: 0;
+    white-space: nowrap;
+    clip-path: inset(100%);
+    clip: rect(0 0 0 0);
+    overflow: hidden;
+  }
+}
+
+@mixin drop-shadow {
+  border-radius: $border-radius;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}

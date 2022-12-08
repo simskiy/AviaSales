@@ -1,0 +1,49 @@
+@import '../../styles/global.scss';
+@import '../../styles/mixins.scss';
+
+.filter {
+  @include drop-shadow;
+  box-sizing: border-box;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 50px;
+  display: flex;
+  grid-area: filterTicket;
+}
+
+.item {
+  flex-grow: 1;
+  border: 1px solid $color-btn-border;
+  overflow: hidden;
+  &:first-child {
+    border-top-left-radius: $border-radius;
+    border-bottom-left-radius: $border-radius;
+  }
+  &:last-child {
+    border-top-right-radius: $border-radius;
+    border-bottom-right-radius: $border-radius;
+  }
+}
+
+.btn {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  color: $color-text;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  background-color: #fff;
+
+  &:active,
+  &:checked {
+    background-color: $color-btn-active;
+    color: #fff;
+  }
+}

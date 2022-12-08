@@ -1,0 +1,9 @@
+.ticketList {
+  display: grid;
+  gap: 20px;
+  list-style: none;
+  margin: 0;
+  // margin-top: 20px;
+  padding: 0;
+  grid-area: ticketList;
+}

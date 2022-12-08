@@ -1,0 +1,72 @@
+@import '../../styles/global.scss';
+@import '../../styles/mixins.scss';
+
+.filter {
+  position: relative;
+  @include drop-shadow;
+  box-sizing: border-box;
+  display: grid;
+  padding: 0;
+  padding-top: 40px;
+  padding-bottom: 10px;
+  margin: 0;
+  border: none;
+  width: 100%;
+  grid-template-columns: 1fr 1fr;
+  grid-area: filterTransfer;
+
+  @include media-tablet {
+    grid-template-columns: 1fr;
+    height: 250px;
+  }
+
+  &__title {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    color: $color-text;
+    font-weight: 600;
+  }
+
+  &__item {
+    margin: 0;
+    height: 40px;
+  }
+
+  &__input {
+    display: none;
+    &:checked + .filter__label::before {
+      background: url('../../../public/check.svg') no-repeat center center;
+    }
+  }
+
+  &__label {
+    position: relative;
+    display: block;
+    color: $color-text;
+    font-size: 0.929rem;
+    font-weight: 400;
+    user-select: none;
+    cursor: pointer;
+    padding-left: 50px;
+    height: 40px;
+    line-height: 40px;
+    &:hover {
+      background-color: $color-hover;
+    }
+    &::before {
+      position: absolute;
+      box-sizing: border-box;
+      top: 10px;
+      left: 20px;
+      content: '';
+      display: block;
+      width: 20px;
+      height: 20px;
+      border: 1px solid $color-input;
+      border-radius: 2px;
+    }
+  }
+}

@@ -1,0 +1,29 @@
+@import '../../styles/mixins.scss';
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  max-width: 500px;
+  min-width: 400px;
+  margin: auto;
+  gap: 20px;
+  grid-template-areas:
+    'filterTicket'
+    'filterTransfer'
+    'ticketList'
+    'btnShow';
+  @include media-tablet {
+    grid-template-columns: 230px 1fr;
+    max-width: 750px;
+    grid-template-areas:
+      'filterTransfer filterTicket'
+      'filterTransfer ticketList'
+      'filterTransfer btnShow';
+  }
+}
+
+// @include media-tablet {
+//   .main {
+
+//   }
+// }
