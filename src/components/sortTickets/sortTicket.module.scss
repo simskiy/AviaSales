@@ -42,7 +42,7 @@
   background-color: #fff;
 
   &:active,
-  &:checked {
+  &--checked {
     background-color: $color-btn-active;
     color: #fff;
   }

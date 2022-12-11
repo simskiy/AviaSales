@@ -11,14 +11,14 @@ export default function Ticket () {
         <img src={img} alt="логотип авиакомпании" className={styles.logo}/>
       </header>
       <ul className={styles['route-list']}>
-        <Route />
-        <Route />
+        <Track />
+        <Track />
       </ul>
     </div>
   )
 }
 
-const Route = () => {
+const Track = () => {
   return (
     <li className={styles['route-item']}>
       <table className={styles.table}>
