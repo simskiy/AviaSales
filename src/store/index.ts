@@ -1,11 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import sortReducer from "./sortSlice";
-import filterReducer from "./filterSlice"
+import mainReducer from './mainSlice'
 
 export default configureStore({
     reducer: {
-        sortTicket: sortReducer,
-        filterTicket: filterReducer
+        reducer: mainReducer
     }
 })

@@ -1,6 +1,6 @@
 import React from "react";
 import styles from './sortTicket.module.scss'
-import { sortCheap, sortExpensive, sortOptimal } from "../../store/sortSlice";
+import { sortCheap, sortExpensive, sortOptimal } from "../../store/mainSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 
@@ -38,8 +38,8 @@ export default function SortTickets() {
 
 const SortItem: React.FC<ISortProps> = ({name, action}) => {
   const dispatch = useDispatch()
-  const state = useSelector((state: State) => state.sortTicket)
-  const str = action().type.toLowerCase().replace('sort/sort', '')
+  const state = useSelector((state: State) => state.reducer.sort)
+  const str = action().type.toLowerCase().replace('tickets/sort', '')
   const classBtnChecked = state[str] ? styles['btn--checked'] : ''
 
   return (

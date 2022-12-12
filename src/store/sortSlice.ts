@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-interface State {
+interface IState {
   [key: string]: boolean
 }
 
@@ -14,13 +14,13 @@ const sortSlice = createSlice({
   name: 'sort',
   initialState,
   reducers: {
-    sortCheap(state: State) {
+    sortCheap(state: IState) {
       Object.keys(state).map(key => state[key] = key === 'cheap')
     },
-    sortExpensive(state: State) {
+    sortExpensive(state: IState) {
       Object.keys(state).map(key => state[key] = key === 'expensive')
     },
-    sortOptimal(state: State) {
+    sortOptimal(state: IState) {
       Object.keys(state).map(key => state[key] = key === 'optimal')
     }
   }

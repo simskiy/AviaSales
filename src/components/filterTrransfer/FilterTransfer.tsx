@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { filterAll, filterNothing, filterRef1, filterRef2, filterRef3 } from "../../store/filterSlice";
+import { filterAll, filterNothing, filterRef1, filterRef2, filterRef3 } from "../../store/mainSlice";
 import styles from './FilterTransfer.module.scss'
 
 const transfer = ['Все', 'Без пересадок', '1 пересадка', '2 пересадки', '3 пересадки']
@@ -20,7 +20,7 @@ export default function FilterTransfer () {
 }
 
 const FilterItem: React.FC<IFilterProps> = ({label, ind}) => {
-  const state = useSelector((state: any) => state.filterTicket)
+  const state = useSelector((state: any) => state.reducer.filter)
   const keys = Object.keys(state)
   const dispatch = useDispatch()
   return (
