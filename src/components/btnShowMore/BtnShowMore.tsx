@@ -9,7 +9,7 @@ export default function BtnShowMore() {
   const lengthTickets = useSelector((state: IState) => state.reducer.server.tickets.length)
 
   return (
-    <button
+      <button
       className={styles.btn}
       onClick={() => {
         if (lengthShowTickets >= lengthTickets) {

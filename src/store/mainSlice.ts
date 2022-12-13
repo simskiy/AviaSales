@@ -19,7 +19,8 @@ const initialState = {
     error: null,
     tickets: [],
     showTickets: [],
-    stop: null
+    stop: false,
+    userId: null
   }
 }
 
@@ -54,16 +55,27 @@ const filterTickets = (state: IState) => {
 
 export const fetchTickets: any = createAsyncThunk(
   'tickets/fetchTickets',
-  async function (_, {rejectWithValue}) {
+  async function (_, {rejectWithValue, getState, dispatch}) {
     const baseUrl = 'https://aviasales-test-api.kata.academy'
     let url = new URL('tickets', baseUrl)
-    const res = await fetch(new URL('search', baseUrl))
-    const data = await res.json()
-
-    url.searchParams.set('searchId', data.searchId)
-    const response = await fetch(url)
-    const resove = await response.json()
-    return await resove
+    const state: any = getState()
+    let id = state.reducer.server.userId
+    try {
+      if (!id) {
+        const res = await fetch(new URL('search', baseUrl))
+        if (!res.ok) throw new Error('Server Error. Не смогли получить id')
+        const data = await res.json()
+        id = data.searchId
+        dispatch({type: 'tickets/addUserId', payload: id})
+      }
+      url.searchParams.set('searchId', id)
+      const response = await fetch(url)
+      if (!response.ok) throw new Error('Server Error. Не смогли получить данные')
+      const tickets = await response.json()
+      return await tickets
+    } catch (error) {
+      return rejectWithValue(error)
+    }
 
   }
 )
@@ -118,28 +130,31 @@ const mainSlice = createSlice({
     },
     addItemsShowTickets(state: IState) {
       addItems(state)
+      filterTickets(state)
+    },
+    addUserId(state: IState, actions) {
+      state.server.userId = actions.payload
     }
   },
   extraReducers(builder) {
     builder
     // get Tickets
-      .addCase(fetchTickets.pending, (state: IState, action) => {
-        state.server.status = 'loading'
-        state.server.error = null
-      })
-      .addCase(fetchTickets.fulfilled, (state: IState, action) => {
-        state.server.status = 'resolved'
-        // state.server.error = null
-        state.server.stop = action.payload.stop
-        state.server.tickets = [...state.server.tickets, ...action.payload.tickets]
-        state.server.stop = action.payload.stop
-        addItems(state)
-      })
-      .addCase(fetchTickets.rejected, (state: IState, action) => {
-        state.server.status = 'rejected'
-        console.log(action.payload)
-        // state.server.error = action.payload
-      })
+    .addCase(fetchTickets.pending, (state: IState, action) => {
+      state.server.status = 'loading'
+      state.server.error = null
+    })
+    .addCase(fetchTickets.fulfilled, (state: IState, action) => {
+      state.server.status = 'resolved'
+      // state.server.error = null
+      state.server.stop = action.payload.stop
+      state.server.tickets = [...state.server.tickets, ...action.payload.tickets]
+      state.server.stop = action.payload.stop
+      addItems(state)
+    })
+    .addCase(fetchTickets.rejected, (state: IState, action) => {
+      state.server.status = 'rejected'
+      state.server.error = action.payload.message
+    })
   }
 })
 

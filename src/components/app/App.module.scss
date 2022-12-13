@@ -8,6 +8,7 @@
   margin: auto;
   gap: 20px;
   grid-template-areas:
+    'logo'
     'filterTicket'
     'filterTransfer'
     'ticketList'
@@ -16,6 +17,7 @@
     grid-template-columns: 230px 1fr;
     max-width: 750px;
     grid-template-areas:
+      'logo           logo'
       'filterTransfer filterTicket'
       'filterTransfer ticketList'
       'filterTransfer btnShow';
