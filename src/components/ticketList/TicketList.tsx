@@ -2,14 +2,16 @@
 import { useSelector } from "react-redux";
 import Ticket from "../ticket/Ticket";
 import styles from './ticketList.module.scss'
-import { IState } from "../../interfaces";
-import { Key } from "react";
+import { IState, ITicket } from "../../interfaces";
+import Load from "../load/Load";
 
 export default function TicketList () {
   const tickets = useSelector((state: IState) => state.reducer.server.showTickets )
+  const isLoading = useSelector((state: IState) => state.reducer.server.status === 'loading')
   return (
     <ul className={styles.ticketList}>
-      {tickets.map((_: any, ind: Key | number) => (<Ticket key={ind} index={ind as number}/>))}
+      {tickets.map((item: ITicket, ind: number) => (<li key={ind}><Ticket index={ind} /></li>))}
+      {isLoading ? <Load /> : null}
     </ul>
   )
 }

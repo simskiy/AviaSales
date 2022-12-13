@@ -1,17 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getTickets } from "./response";
 import { IState, ITicket } from "../interfaces";
 
 const initialState = {
   filter: {
-    all: false,
-    nothing: false,
-    ref1: false,
-    ref2: false,
-    ref3: false,
+    all: true,
+    nothing: true,
+    ref1: true,
+    ref2: true,
+    ref3: true,
   },
   sort: {
-    cheap: true,
+    cheap: false,
     expensive: false,
     optimal: false,
   },
@@ -38,17 +37,34 @@ const addItems = (state: IState) => {
   state.server.showTickets = state.server.showTickets.concat(state.server.tickets.slice(curLengthShowTickers, curLengthShowTickers + NUM_TICKETS))
 }
 
-const fillShowTickets = (state: IState) => {
+const filterTickets = (state: IState) => {
   const curLengthShowTickers = state.server.showTickets.length
-  state.server.showTickets = []
-  state.server.showTickets = state.server.tickets.slice(0, curLengthShowTickers)
+  let result: ITicket[] = []
+  state.server.tickets.forEach((item: ITicket) => {
+    const l = item.segments[0].stops.length
+    switch (true) {
+      case state.filter.nothing && l === 0: result.push(item); break
+      case state.filter.ref1 && l === 1: result.push(item); break
+      case state.filter.ref2 && l === 2: result.push(item); break
+      case state.filter.ref3 && l === 3: result.push(item); break
+    }
+  })
+  state.server.showTickets = result.slice(0, curLengthShowTickers < NUM_TICKETS ? 5 : curLengthShowTickers)
 }
 
 export const fetchTickets: any = createAsyncThunk(
   'tickets/fetchTickets',
-  async function () {
-    const tickets = await getTickets()
-    return tickets
+  async function (_, {rejectWithValue}) {
+    const baseUrl = 'https://aviasales-test-api.kata.academy'
+    let url = new URL('tickets', baseUrl)
+    const res = await fetch(new URL('search', baseUrl))
+    const data = await res.json()
+
+    url.searchParams.set('searchId', data.searchId)
+    const response = await fetch(url)
+    const resove = await response.json()
+    return await resove
+
   }
 )
 
@@ -59,31 +75,37 @@ const mainSlice = createSlice({
     filterAll(state: IState) {
       state.filter.all = !state.filter.all
       Object.keys(state.filter).map(key => state.filter[key] = state.filter.all)
+      filterTickets(state)
     },
     filterNothing(state: IState) {
       state.filter.nothing = !state.filter.nothing
       state.filter.all = isAllChecked(state)
+      filterTickets(state)
     },
     filterRef1(state: IState) {
       state.filter.ref1 = !state.filter.ref1
       state.filter.all = isAllChecked(state)
+      filterTickets(state)
     },
     filterRef2(state: IState) {
       state.filter.ref2 = !state.filter.ref2
       state.filter.all = isAllChecked(state)
+      filterTickets(state)
     },
     filterRef3(state: IState){
       state.filter.ref3 = !state.filter.ref3
       state.filter.all = isAllChecked(state)
+      filterTickets(state)
     },
     sortCheap(state: IState) {
       Object.keys(state.sort).map(key => state.sort[key] = key === 'cheap')
       state.server.tickets.sort((a: ITicket, b: ITicket) => a.price - b.price )
-      fillShowTickets(state)
+      filterTickets(state)
     },
     sortExpensive(state: IState) {
       Object.keys(state.sort).map(key => state.sort[key] = key === 'expensive')
       state.server.tickets.sort((a: ITicket, b: ITicket) => a.segments[0].duration - b.segments[0].duration)
+      filterTickets(state)
     },
     sortOptimal(state: IState) {
       Object.keys(state.sort).map(key => state.sort[key] = key === 'optimal')
@@ -92,6 +114,7 @@ const mainSlice = createSlice({
         const k2 = b.segments[0].duration / b.price
         return k2 - k1
       })
+      filterTickets(state)
     },
     addItemsShowTickets(state: IState) {
       addItems(state)
@@ -106,10 +129,16 @@ const mainSlice = createSlice({
       })
       .addCase(fetchTickets.fulfilled, (state: IState, action) => {
         state.server.status = 'resolved'
+        // state.server.error = null
         state.server.stop = action.payload.stop
         state.server.tickets = [...state.server.tickets, ...action.payload.tickets]
         state.server.stop = action.payload.stop
         addItems(state)
+      })
+      .addCase(fetchTickets.rejected, (state: IState, action) => {
+        state.server.status = 'rejected'
+        console.log(action.payload)
+        // state.server.error = action.payload
       })
   }
 })

@@ -7,6 +7,7 @@ import styles from './App.module.scss';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { fetchTickets } from '../../store/mainSlice';
+import { AnyAction } from 'redux';
 
 const App = () => {
   const dispatch = useDispatch()

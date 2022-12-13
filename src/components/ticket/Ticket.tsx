@@ -38,7 +38,7 @@ const checkPrice = (price: number) => {
 }
 
 export default function Ticket (props: { index: number; }) {
-  const ticket = useSelector((state: IState) => state.reducer.server.tickets[props.index])
+  const ticket = useSelector((state: IState) => state.reducer.server.showTickets[props.index])
   const img = `https://pics.avs.io/99/36/${ticket.carrier}.png`
   return (
     <div className={styles.ticket}>
